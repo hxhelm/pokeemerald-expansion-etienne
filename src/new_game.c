@@ -45,6 +45,8 @@
 #include "mystery_gift.h"
 #include "union_room_chat.h"
 #include "constants/items.h"
+#include "strings.h"
+#include "string_util.h"
 
 extern const u8 EventScript_ResetAllMapFlags[];
 
@@ -85,6 +87,11 @@ static void InitPlayerTrainerId(void)
 {
     u32 trainerId = (Random() << 16) | GetGeneratedTrainerIdLower();
     SetTrainerId(trainerId, gSaveBlock2Ptr->playerTrainerId);
+}
+
+static void InitPlayerName(void)
+{
+    StringCopy(gSaveBlock2Ptr->playerName, gText_PlayerName);
 }
 
 // L=A isnt set here for some reason.
@@ -162,6 +169,7 @@ void NewGameInitData(void)
     gSaveBlock2Ptr->specialSaveWarpFlags = 0;
     gSaveBlock2Ptr->gcnLinkFlags = 0;
     InitPlayerTrainerId();
+    InitPlayerName();
     PlayTimeCounter_Reset();
     ClearPokedexFlags();
     InitEventData();
