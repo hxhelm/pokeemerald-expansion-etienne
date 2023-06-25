@@ -16,50 +16,6 @@ gText_Birch_Welcome::
     .string "so let's just get started!\p"
     .string "$"
 
-gText_Birch_Pokemon::
-	.string "This is what we call a “POKéMON.”\p"
-	.string "\n"
-	.string "$"
-
-gText_Birch_Greeting::
-	.string "Hello Etienne, nice seeing you here!\p"
-	.string "I've heard so much about you from\n"
-	.string "your friends.\p"
-	.string "Most of it wasn't really that good\n"
-	.string "but I'm sure you'll do great!\p"
-	.string "You know, usually, this is the part\n"
-	.string "were I tell you about this world\p"
-	.string "and how it's inhabited by creatures\n"
-	.string "called POKéMON.\p"
-	.string "But I'm sure you already know that.\n"
-	.string "So let's just skip that part.\p"
-    .string "Let's see... what else... Gender?\n"
-    .string "No, name... we got that too...\p"
-    .string "Well, looks like we are ready to go,\n"
-    .string "so let's just get started!\p"
-	.string "$"
-
-gText_Birch_AndYouAre::
-	.string "And you are?$"
-
-gText_Birch_BoyOrGirl::
-	.string "Are you a boy?\n"
-	.string "Or are you a girl?$"
-
-gText_Birch_WhatsYourName::
-	.string "All right.\n"
-	.string "What's your name?$"
-
-gText_Birch_SoItsPlayer::
-	.string "So it's {PLAYER}{KUN}?$"
-
-gText_Birch_YourePlayer::
-	.string "Ah, okay!\p"
-	.string "You're {PLAYER}{KUN} who's moving to my\n"
-	.string "hometown of LITTLEROOT.\l"
-	.string "I get it now!\p"
-	.string "$"
-
 gText_Birch_AreYouReady::
 	.string "All right, are you ready?\p"
 	.string "Your very own adventure is about\n"
