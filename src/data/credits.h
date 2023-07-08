@@ -57,6 +57,7 @@ enum
     PAGE_EXECUTIVE_DIRECTOR,
     PAGE_EXECUTIVE_PRODUCERS_1,
     PAGE_EXECUTIVE_PRODUCERS_2,
+    PAGE_SPECIAL_THANKS_6,
     PAGE_COUNT
 };
 
@@ -221,6 +222,10 @@ static const u8 sCreditsText_MotoyasuTojima[]                 = _("Motoyasu Toji
 static const u8 sCreditsText_NicolaPrattBarlow[]              = _("Nicola Pratt-Barlow");
 static const u8 sCreditsText_ShellieDow[]                     = _("Shellie Dow");
 static const u8 sCreditsText_ErikJohnson[]                    = _("Erik Johnson");
+static const u8 sCreditsText_WilhelmWidergold[]               = _("Wilhelm Widergold");
+static const u8 sCreditsText_NickGeis[]                       = _("Nick Udomsak Geis");
+static const u8 sCreditsText_MarcGrimke[]                     = _("Marc Grimke");
+static const u8 sCreditsText_AntonioFinneira[]                = _("Antonio Finneira");
 static const struct CreditsEntry sCreditsEntry_EmptyString[]                    = { 0, FALSE, sCreditsText_EmptyString};
 static const struct CreditsEntry sCreditsEntry_PkmnEmeraldVersion[]             = { 7,  TRUE, sCreditsText_PkmnEmeraldVersion};
 static const struct CreditsEntry sCreditsEntry_Credits[]                        = {11,  TRUE, sCreditsText_Credits};
@@ -380,6 +385,10 @@ static const struct CreditsEntry sCreditsEntry_MotoyasuTojima[]                 
 static const struct CreditsEntry sCreditsEntry_NicolaPrattBarlow[]              = { 0, FALSE, sCreditsText_NicolaPrattBarlow};
 static const struct CreditsEntry sCreditsEntry_ShellieDow[]                     = { 0, FALSE, sCreditsText_ShellieDow};
 static const struct CreditsEntry sCreditsEntry_ErikJohnson[]                    = { 0, FALSE, sCreditsText_ErikJohnson};
+static const struct CreditsEntry sCreditsEntry_WilhelmWidergold[]               = { 0, FALSE, sCreditsText_WilhelmWidergold};
+static const struct CreditsEntry sCreditsEntry_NickGeis[]                       = { 0, FALSE, sCreditsText_NickGeis};
+static const struct CreditsEntry sCreditsEntry_MarcGrimke[]                     = { 0, FALSE, sCreditsText_MarcGrimke};
+static const struct CreditsEntry sCreditsEntry_AntonioFinneira[]                = { 0, FALSE, sCreditsText_AntonioFinneira};
 
 #define _ sCreditsEntry_EmptyString
 static const struct CreditsEntry *const sCreditsEntryPointerTable[PAGE_COUNT][ENTRIES_PER_PAGE] =
@@ -782,6 +791,13 @@ static const struct CreditsEntry *const sCreditsEntryPointerTable[PAGE_COUNT][EN
         sCreditsEntry_TsunekazIshihara,
         _,
         _,
+    },
+    [PAGE_SPECIAL_THANKS_6] = {
+        sCreditsEntry_SpecialThanks,
+        sCreditsEntry_WilhelmWidergold,
+        sCreditsEntry_NickGeis,
+        sCreditsEntry_MarcGrimke,
+        sCreditsEntry_AntonioFinneira,
     },
 };
 #undef _
