@@ -12,8 +12,9 @@
 #define I_GRISEOUS_ORB_FORM_CHANGE      GEN_LATEST  // In Gen9+, the Griseous Orb no longer changes Giratina's form when held.
 #define I_USE_EVO_HELD_ITEMS_FROM_BAG   FALSE       // If TRUE, items such as Razor Claw or Electirizer will be usable from the bag to evolve a Pokémon just like in LA.
 
-// TM config
+// TM & HM config
 #define I_REUSABLE_TMS          TRUE       // In Gen5-8, TMs are reusable. Setting this to TRUE will make all vanilla TMs reusable, though they can also be cherry-picked by setting their importance to 1.
+#define I_FORGETTABLE_HMS       TRUE       // In Gen7+, HMs are replaced by other in game mechanics or exist as TMs. Setting this to TRUE will make all vanilla HMs forgettable.
 
 // Repel/Lure config
 // These two settings are both independent and complementary.
