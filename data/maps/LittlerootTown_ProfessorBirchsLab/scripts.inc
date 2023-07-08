@@ -744,7 +744,12 @@ LittlerootTown_ProfessorBirchsLab_Text_HeardYouBeatRivalTakePokedex:
 	.string "a TRAINER already.\p"
 	.string "Here, {PLAYER}{KUN}, I ordered this for my\n"
 	.string "research, but I think you should have\l"
-	.string "this POKéDEX.$"
+	.string "this POKéDEX.\p"
+	.string "Don't ask my why the footprints of each\n"
+    .string "POKéMON are registered, must have been\l"
+    .string "some weirdo that added this in the\l"
+    .string "newest version. Just ignore them... or\l"
+    .string "enjoy them? Anyway-$"
 
 LittlerootTown_ProfessorBirchsLab_Text_ReceivedPokedex:
 	.string "{PLAYER} received the POKéDEX!$"
