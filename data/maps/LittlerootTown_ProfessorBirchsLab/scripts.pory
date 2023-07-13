@@ -1,3 +1,129 @@
+const STARTER_MON_TREECKO = 0
+const STARTER_MON_TORCHIC = 1
+const STARTER_MON_MUDKIP = 2
+
+mapscripts LittlerootTown_ProfessorBirchsLab_MapScripts {
+	MAP_SCRIPT_ON_TRANSITION: LittlerootTown_ProfessorBirchsLab_OnTransition
+	MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE: LittlerootTown_ProfessorBirchsLab_OnWarp
+	MAP_SCRIPT_ON_FRAME_TABLE: LittlerootTown_ProfessorBirchsLab_OnFrame
+	
+	# State descriptions for VAR_DEX_UPGRADE_JOHTO_STARTER_STATE
+	# 1: Beat Elite Four, Dex upgrade ready
+	# 2: Received National Dex
+	# 3: Left lab after receiving National Dex
+	# 4: Entered lab after catching all Hoenn mons
+	# 5: Birch told player to choose Johto starter
+	# 6: Chose Johto starter
+
+	# State descriptions for VAR_BIRCH_LAB_STATE
+	# 1: Never occurs
+	# 2: Chose starter
+	# 3: Received starter in lab
+	# 4: Defeated rival on Route 103
+	# 5: Received pokedex
+}
+
+script(local) LittlerootTown_ProfessorBirchsLab_OnTransition {
+	call(Common_EventScript_SetupRivalGfxId)
+	call(ProfBirch_EventScript_UpdateLocation)
+	if (var(VAR_DEX_UPGRADE_JOHTO_STARTER_STATE) >= 6) {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_SetAfterJohtoStarterLayout)
+	} elif (var(VAR_DEX_UPGRADE_JOHTO_STARTER_STATE) >= 4) {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_SetJohtoStarterLayout)
+	} elif (var(VAR_DEX_UPGRADE_JOHTO_STARTER_STATE) == 3) {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter)
+	}
+}
+
+# The starter is technically given prior to this on Route 101 by special ChooseStarter
+# This is just where the game tells you its yours and lets you nickname it
+script LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent {
+	lockall
+	bufferleadmonspeciesname(STR_VAR_1)
+	message(LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon)
+	waitmessage
+	playfanfare(MUS_OBTAIN_ITEM)
+	waitfanfare
+	msgbox(LittlerootTown_ProfessorBirchsLab_Text_WhyNotGiveNicknameToMon, MSGBOX_YESNO)
+	if (var(VAR_RESULT)) {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter)
+	} else {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter)
+	}
+	end
+}
+
+script LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter {
+	setvar(VAR_0x8004, 0)
+	call(Common_EventScript_NameReceivedPartyMon)
+	goto(LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter)
+	end
+}
+
+script LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter {
+	message(LittlerootTown_ProfessorBirchsLab_Text_PlayerTakeSecondStarter)
+	waitmessage
+	switch (var(VAR_STARTER_MON)) {
+        case STARTER_MON_TREECKO:
+			givemon(SPECIES_MUDKIP, 5, ITEM_MYSTIC_WATER)
+			break
+		case STARTER_MON_TORCHIC:
+			givemon(SPECIES_TREECKO, 5, ITEM_MIRACLE_SEED)
+			break
+		case STARTER_MON_MUDKIP:
+			givemon(SPECIES_TORCHIC, 5, ITEM_CHARCOAL)
+			break
+    }
+	# TODO: Handle mon given to party, pc, or no more room
+	goto(LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty)
+	end
+}
+
+script LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty {
+	call(LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare)
+	msgbox(format("Of course, you can nickname that too!"), MSGBOX_YESNO)
+	if (var(VAR_RESULT)) {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_NicknameSecondStarter)
+	} else {
+		goto(LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival)
+	}
+	end
+}
+
+script LittlerootTown_ProfessorBirchsLab_EventScript_NicknameSecondStarter {
+	setvar(VAR_0x8004, 1)
+	call(Common_EventScript_NameReceivedPartyMon)
+	goto(LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival)
+	end
+}
+
+script LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare {
+	switch (var(VAR_STARTER_MON)) {
+        case STARTER_MON_TREECKO:
+			bufferspeciesname(STR_VAR_1, SPECIES_MUDKIP)
+			break
+		case STARTER_MON_TORCHIC:
+			bufferspeciesname(STR_VAR_1, SPECIES_TREECKO)
+			break
+		case STARTER_MON_MUDKIP:
+			bufferspeciesname(STR_VAR_1, SPECIES_TORCHIC)
+			break
+    }
+
+	playfanfare(MUS_OBTAIN_ITEM)
+	message(format("{PLAYER} received {STR_VAR_1}!"))
+	waitmessage
+	waitfanfare
+	return
+}
+
+text LittlerootTown_ProfessorBirchsLab_Text_PlayerTakeSecondStarter {
+	format("You know what?\n
+I've got a little something extra for you!\p
+Since your first battle might be a bit tough against {RIVAL}'s POKéMON, how about this?\p
+I'm giving you another fantastic POKéMON to help you out!\p")
+}
+
 raw `
 .set LOCALID_AIDE, 1
 .set LOCALID_BIRCH, 2
@@ -5,35 +131,6 @@ raw `
 .set LOCALID_BALL_CYNDAQUIL, 4
 .set LOCALID_BALL_TOTODILE, 5
 .set LOCALID_BALL_CHIKORITA, 6
-
-LittlerootTown_ProfessorBirchsLab_MapScripts::
-	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_ProfessorBirchsLab_OnTransition
-	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_ProfessorBirchsLab_OnWarp
-	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_ProfessorBirchsLab_OnFrame
-	.byte 0
-
-	@ State descriptions for VAR_DEX_UPGRADE_JOHTO_STARTER_STATE
-	@ 1: Beat Elite Four, Dex upgrade ready
-	@ 2: Received National Dex
-	@ 3: Left lab after receiving National Dex
-	@ 4: Entered lab after catching all Hoenn mons
-	@ 5: Birch told player to choose Johto starter
-	@ 6: Chose Johto starter
-
-	@ State descriptions for VAR_BIRCH_LAB_STATE
-	@ 1: Never occurs
-	@ 2: Chose starter
-	@ 3: Received starter in lab
-	@ 4: Defeated rival on Route 103
-	@ 5: Received pokedex
-
-LittlerootTown_ProfessorBirchsLab_OnTransition:
-	call Common_EventScript_SetupRivalGfxId
-	call ProfBirch_EventScript_UpdateLocation
-	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 6, LittlerootTown_ProfessorBirchsLab_EventScript_SetAfterJohtoStarterLayout
-	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_SetJohtoStarterLayout
-	goto_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3, LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter
-	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter::
 	specialvar VAR_RESULT, HasAllHoennMons
@@ -109,26 +206,6 @@ LittlerootTown_ProfessorBirchsLab_OnFrame:
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 1, LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_ChooseJohtoStarter
 	.2byte 0
-
-@ The starter is technically given prior to this on Route 101 by special ChooseStarter
-@ This is just where the game tells you its yours and lets you nickname it
-LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent::
-	lockall
-	bufferleadmonspeciesname STR_VAR_1
-	message LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon
-	waitmessage
-	playfanfare MUS_OBTAIN_ITEM
-	waitfanfare
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_WhyNotGiveNicknameToMon, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter
-	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
-	end
-
-LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter::
-	setvar VAR_0x8004, 0
-	call Common_EventScript_NameReceivedPartyMon
-	goto LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
-	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_MightBeGoodIdeaToGoSeeRival, MSGBOX_YESNO

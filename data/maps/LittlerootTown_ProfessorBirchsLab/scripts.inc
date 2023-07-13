@@ -1,38 +1,136 @@
-.set LOCALID_AIDE, 1
-.set LOCALID_BIRCH, 2
-.set LOCALID_RIVAL, 3
-.set LOCALID_BALL_CYNDAQUIL, 4
-.set LOCALID_BALL_TOTODILE, 5
-.set LOCALID_BALL_CHIKORITA, 6
-
 LittlerootTown_ProfessorBirchsLab_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_ProfessorBirchsLab_OnTransition
 	map_script MAP_SCRIPT_ON_WARP_INTO_MAP_TABLE, LittlerootTown_ProfessorBirchsLab_OnWarp
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, LittlerootTown_ProfessorBirchsLab_OnFrame
 	.byte 0
 
-	@ State descriptions for VAR_DEX_UPGRADE_JOHTO_STARTER_STATE
-	@ 1: Beat Elite Four, Dex upgrade ready
-	@ 2: Received National Dex
-	@ 3: Left lab after receiving National Dex
-	@ 4: Entered lab after catching all Hoenn mons
-	@ 5: Birch told player to choose Johto starter
-	@ 6: Chose Johto starter
-
-	@ State descriptions for VAR_BIRCH_LAB_STATE
-	@ 1: Never occurs
-	@ 2: Chose starter
-	@ 3: Received starter in lab
-	@ 4: Defeated rival on Route 103
-	@ 5: Received pokedex
 
 LittlerootTown_ProfessorBirchsLab_OnTransition:
 	call Common_EventScript_SetupRivalGfxId
 	call ProfBirch_EventScript_UpdateLocation
-	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 6, LittlerootTown_ProfessorBirchsLab_EventScript_SetAfterJohtoStarterLayout
-	goto_if_ge VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_SetJohtoStarterLayout
-	goto_if_eq VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3, LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter
+	compare VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 6
+	goto_if_ge LittlerootTown_ProfessorBirchsLab_OnTransition_1
+	compare VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4
+	goto_if_ge LittlerootTown_ProfessorBirchsLab_OnTransition_2
+	compare VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 3
+	goto_if_eq LittlerootTown_ProfessorBirchsLab_OnTransition_3
+	return
+
+LittlerootTown_ProfessorBirchsLab_OnTransition_1:
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_SetAfterJohtoStarterLayout
+	return
+
+LittlerootTown_ProfessorBirchsLab_OnTransition_2:
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_SetJohtoStarterLayout
+	return
+
+LittlerootTown_ProfessorBirchsLab_OnTransition_3:
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter
+	return
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent::
+	lockall
+	bufferleadmonspeciesname STR_VAR_1
+	message LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon
+	waitmessage
+	playfanfare MUS_OBTAIN_ITEM
+	waitfanfare
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_WhyNotGiveNicknameToMon, MSGBOX_YESNO
+	compare VAR_RESULT, 0
+	goto_if_ne LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent_2
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent_1:
 	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent_2:
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent_1
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter::
+	setvar VAR_0x8004, 0
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter
+	end
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter::
+	message LittlerootTown_ProfessorBirchsLab_Text_PlayerTakeSecondStarter
+	waitmessage
+	switch VAR_STARTER_MON
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_3
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_4
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_5
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_1:
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_3:
+	givemon SPECIES_MUDKIP, 5, ITEM_MYSTIC_WATER
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_1
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_4:
+	givemon SPECIES_TREECKO, 5, ITEM_MIRACLE_SEED
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_1
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_5:
+	givemon SPECIES_TORCHIC, 5, ITEM_CHARCOAL
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter_1
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare
+	msgbox LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty_Text_0, MSGBOX_YESNO
+	compare VAR_RESULT, 0
+	goto_if_ne LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty_2
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty_1:
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty_2:
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_NicknameSecondStarter
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty_1
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_NicknameSecondStarter::
+	setvar VAR_0x8004, 1
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
+	end
+
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare::
+	switch VAR_STARTER_MON
+	case 0, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_3
+	case 1, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_4
+	case 2, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_5
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_1:
+	playfanfare MUS_OBTAIN_ITEM
+	message LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_Text_0
+	waitmessage
+	waitfanfare
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_3:
+	bufferspeciesname STR_VAR_1, SPECIES_MUDKIP
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_1
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_4:
+	bufferspeciesname STR_VAR_1, SPECIES_TREECKO
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_1
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_5:
+	bufferspeciesname STR_VAR_1, SPECIES_TORCHIC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_1
+
+
+.set LOCALID_AIDE, 1
+.set LOCALID_BIRCH, 2
+.set LOCALID_RIVAL, 3
+.set LOCALID_BALL_CYNDAQUIL, 4
+.set LOCALID_BALL_TOTODILE, 5
+.set LOCALID_BALL_CHIKORITA, 6
 
 LittlerootTown_ProfessorBirchsLab_EventScript_CheckReadyForJohtoStarter::
 	specialvar VAR_RESULT, HasAllHoennMons
@@ -108,26 +206,6 @@ LittlerootTown_ProfessorBirchsLab_OnFrame:
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 1, LittlerootTown_ProfessorBirchsLab_EventScript_UpgradeToNationalDex
 	map_script_2 VAR_DEX_UPGRADE_JOHTO_STARTER_STATE, 4, LittlerootTown_ProfessorBirchsLab_EventScript_ChooseJohtoStarter
 	.2byte 0
-
-@ The starter is technically given prior to this on Route 101 by special ChooseStarter
-@ This is just where the game tells you its yours and lets you nickname it
-LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent::
-	lockall
-	bufferleadmonspeciesname STR_VAR_1
-	message LittlerootTown_ProfessorBirchsLab_Text_LikeYouToHavePokemon
-	waitmessage
-	playfanfare MUS_OBTAIN_ITEM
-	waitfanfare
-	msgbox LittlerootTown_ProfessorBirchsLab_Text_WhyNotGiveNicknameToMon, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter
-	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
-	end
-
-LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter::
-	setvar VAR_0x8004, 0
-	call Common_EventScript_NameReceivedPartyMon
-	goto LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival
-	end
 
 LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival::
 	msgbox LittlerootTown_ProfessorBirchsLab_Text_MightBeGoodIdeaToGoSeeRival, MSGBOX_YESNO
@@ -1004,3 +1082,20 @@ LittlerootTown_ProfessorBirchsLab_Text_ScottAboardSSTidalCall:
 	.string "we meet. I'll be waiting!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty_Text_0:
+	.string "Of course, you can nickname that too!$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedSecondStarterFanfare_Text_0:
+	.string "{PLAYER} received {STR_VAR_1}!$"
+
+LittlerootTown_ProfessorBirchsLab_Text_PlayerTakeSecondStarter::
+	.string "You know what?\n"
+	.string "I've got a little something extra for\l"
+	.string "you!\p"
+	.string "Since your first battle might be a bit\n"
+	.string "tough against {RIVAL}'s POKéMON,\l"
+	.string "how about this?\p"
+	.string "I'm giving you another fantastic\n"
+	.string "POKéMON to help you out!\p"
+	.string "$"
