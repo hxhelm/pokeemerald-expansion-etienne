@@ -1,6 +1,8 @@
 const STARTER_MON_TREECKO = 0
 const STARTER_MON_TORCHIC = 1
 const STARTER_MON_MUDKIP = 2
+# VAR_0x8004 is used as the index in the pokemon party when changing the nickname
+const CHANGE_NAME_INDEX = VAR_0x8004
 
 mapscripts LittlerootTown_ProfessorBirchsLab_MapScripts {
 	MAP_SCRIPT_ON_TRANSITION: LittlerootTown_ProfessorBirchsLab_OnTransition
@@ -54,7 +56,7 @@ script LittlerootTown_ProfessorBirchsLab_EventScript_GiveStarterEvent {
 }
 
 script LittlerootTown_ProfessorBirchsLab_EventScript_NicknameStarter {
-	setvar(VAR_0x8004, 0)
+	setvar(CHANGE_NAME_INDEX, 0)
 	call(Common_EventScript_NameReceivedPartyMon)
 	goto(LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarter)
 	end
@@ -91,7 +93,7 @@ script LittlerootTown_ProfessorBirchsLab_EventScript_ReceiveSecondStarterParty {
 }
 
 script LittlerootTown_ProfessorBirchsLab_EventScript_NicknameSecondStarter {
-	setvar(VAR_0x8004, 1)
+	setvar(CHANGE_NAME_INDEX, 1)
 	call(Common_EventScript_NameReceivedPartyMon)
 	goto(LittlerootTown_ProfessorBirchsLab_EventScript_GoSeeRival)
 	end
