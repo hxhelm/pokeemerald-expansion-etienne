@@ -264,6 +264,8 @@ Route101_Text_HelpMe:
 	.string "H-help me!$"
 
 Route101_Text_PleaseHelp:
+    .string "A Snorlax?!\p"
+    .string "No wait- that's a kid!\p"
 	.string "Hello! You over there!\n"
 	.string "Please! Help!\p"
 	.string "In my BAG!\n"
