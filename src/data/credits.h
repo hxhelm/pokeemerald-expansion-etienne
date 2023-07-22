@@ -57,6 +57,8 @@ enum
     PAGE_EXECUTIVE_DIRECTOR,
     PAGE_EXECUTIVE_PRODUCERS_1,
     PAGE_EXECUTIVE_PRODUCERS_2,
+    PAGE_FINANCIAL_SUPPORT_1,
+    PAGE_FINANCIAL_SUPPORT_2,
     PAGE_SPECIAL_THANKS_6,
     PAGE_COUNT
 };
@@ -90,6 +92,7 @@ static const u8 sCreditsText_PokedexText[]                    = _("POKéDEX Text
 static const u8 sCreditsText_EnvAndToolPgrms[]                = _("Environment & Tool Programmers");
 static const u8 sCreditsText_NCLProductTesting[]              = _("NCL Product Testing");
 static const u8 sCreditsText_SpecialThanks[]                  = _("Special Thanks");
+static const u8 sCreditsText_FinancialSupport[]               = _("Financial Support");
 static const u8 sCreditsText_Coordinators[]                   = _("Coordinators");
 static const u8 sCreditsText_Producers[]                      = _("Producers");
 static const u8 sCreditsText_ExecProducers[]                  = _("Executive Producers");
@@ -226,6 +229,9 @@ static const u8 sCreditsText_WilhelmWidergold[]               = _("Wilhelm Wider
 static const u8 sCreditsText_NickGeis[]                       = _("Nick Udomsak Geis");
 static const u8 sCreditsText_MarcGrimke[]                     = _("Marc Grimke");
 static const u8 sCreditsText_AntonioFinneira[]                = _("Antonio Finneira");
+static const u8 sCreditsText_LeonScholz[]                     = _("Leon Scholz");
+static const u8 sCreditsText_JonathanBrill[]                  = _("Jonathan Brill");
+static const u8 sCreditsText_KirstieTandler[]                 = _("Kirstie Tandler");
 static const struct CreditsEntry sCreditsEntry_EmptyString[]                    = { 0, FALSE, sCreditsText_EmptyString};
 static const struct CreditsEntry sCreditsEntry_PkmnEmeraldVersion[]             = { 7,  TRUE, sCreditsText_PkmnEmeraldVersion};
 static const struct CreditsEntry sCreditsEntry_Credits[]                        = {11,  TRUE, sCreditsText_Credits};
@@ -253,6 +259,7 @@ static const struct CreditsEntry sCreditsEntry_PokedexText[]                    
 static const struct CreditsEntry sCreditsEntry_EnvAndToolPgrms[]                = { 6,  TRUE, sCreditsText_EnvAndToolPgrms};
 static const struct CreditsEntry sCreditsEntry_NCLProductTesting[]              = {11,  TRUE, sCreditsText_NCLProductTesting};
 static const struct CreditsEntry sCreditsEntry_SpecialThanks[]                  = {10,  TRUE, sCreditsText_SpecialThanks};
+static const struct CreditsEntry sCreditsEntry_FinancialSupport[]               = {10,  TRUE, sCreditsText_FinancialSupport};
 static const struct CreditsEntry sCreditsEntry_Coordinators[]                   = {11,  TRUE, sCreditsText_Coordinators};
 static const struct CreditsEntry sCreditsEntry_Producers[]                      = {11,  TRUE, sCreditsText_Producers};
 static const struct CreditsEntry sCreditsEntry_ExecProducers[]                  = { 7,  TRUE, sCreditsText_ExecProducers};
@@ -389,6 +396,9 @@ static const struct CreditsEntry sCreditsEntry_WilhelmWidergold[]               
 static const struct CreditsEntry sCreditsEntry_NickGeis[]                       = { 0, FALSE, sCreditsText_NickGeis};
 static const struct CreditsEntry sCreditsEntry_MarcGrimke[]                     = { 0, FALSE, sCreditsText_MarcGrimke};
 static const struct CreditsEntry sCreditsEntry_AntonioFinneira[]                = { 0, FALSE, sCreditsText_AntonioFinneira};
+static const struct CreditsEntry sCreditsEntry_LeonScholz[]                     = { 0, FALSE, sCreditsText_LeonScholz};
+static const struct CreditsEntry sCreditsEntry_JonathanBrill[]                  = { 0, FALSE, sCreditsText_JonathanBrill};
+static const struct CreditsEntry sCreditsEntry_KirstieTandler[]                 = { 0, FALSE, sCreditsText_KirstieTandler};
 
 #define _ sCreditsEntry_EmptyString
 static const struct CreditsEntry *const sCreditsEntryPointerTable[PAGE_COUNT][ENTRIES_PER_PAGE] =
@@ -792,12 +802,26 @@ static const struct CreditsEntry *const sCreditsEntryPointerTable[PAGE_COUNT][EN
         _,
         _,
     },
+    [PAGE_FINANCIAL_SUPPORT_1] = {
+        sCreditsEntry_FinancialSupport,
+        sCreditsEntry_LeonScholz,
+        sCreditsEntry_JonathanBrill,
+        sCreditsEntry_KirstieTandler,
+        _,
+    },
+    [PAGE_FINANCIAL_SUPPORT_2] = {
+        sCreditsEntry_FinancialSupport,
+        sCreditsEntry_MarcGrimke,
+        sCreditsEntry_AntonioFinneira,
+        _,
+        _,
+    },
     [PAGE_SPECIAL_THANKS_6] = {
         sCreditsEntry_SpecialThanks,
         sCreditsEntry_WilhelmWidergold,
         sCreditsEntry_NickGeis,
-        sCreditsEntry_MarcGrimke,
-        sCreditsEntry_AntonioFinneira,
+        _,
+        _,
     },
 };
 #undef _
